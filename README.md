@@ -33,6 +33,26 @@ python3 run_project.py
 Python 3.9+ is needed (SQLite 3.25+ for window functions, which ships with current Python).
 To explore by hand: `sqlite3 diabetes.db` then paste any query from `queries.sql`.
 
+## Example results
+
+**Diabetes prevalence by age group** (query Q3, a JOIN with a lookup table)
+
+| Age group | Patients | Diabetic | Prevalence |
+|---|---|---|---|
+| Under 40 | 139 | 26 | 18.7% |
+| 40-59 | 260 | 99 | 38.1% |
+| 60 and over | 101 | 61 | 60.4% |
+
+**Prevalence by BMI group** (query Q4, a CASE expression)
+
+| BMI group | Patients | Prevalence |
+|---|---|---|
+| Normal (under 25) | 129 | 16.3% |
+| Overweight (25-29.9) | 174 | 28.7% |
+| Obese (30+) | 197 | 58.4% |
+
+All ten queries and their results are in [results.md](results.md).
+
 ## Main findings
 - 186 of 500 patients (37.2%) have diabetes.
 - Prevalence rises with age (18.7% under 40, 38.1% at 40-59, 60.4% at 60+) and with BMI
@@ -41,3 +61,9 @@ To explore by hand: `sqlite3 diabetes.db` then paste any query from `queries.sql
   under 40 with normal BMI have diabetes (this is a synthetic dataset, so it shows how the data was generated,
   not real clinical patterns).
 - The data-quality check found no missing values and no BMI that disagrees with height and weight.
+
+## What I learned
+- How a window function such as `NTILE` or `RANK` differs from `GROUP BY`: it keeps every row while still comparing it with its group.
+- How a CTE makes a long query easier to read, and how a correlated subquery compares each row with its own group's average.
+- Why data-quality checks come first: I verified there were no missing values and that BMI matched height and weight before analysing anything.
+- How to connect SQL with Python: a short script loads the Excel file into SQLite and runs every query.
